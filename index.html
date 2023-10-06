@@ -26,34 +26,16 @@
 
 <body>
     <div class="ortala" style="width: 70rem; padding-left: 25%;">
-        <select class="form-select" aria-label="Default select example">
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+        <select id="countrySelect" class="form-select" aria-label="Default select example">
+            <option selected>Select a Country</option>
         </select>
+
+        <button class="btn btn-success getir">getir</button>
     </div>
 
 
-    <div class="ortala">
-        <div class="card bg-light mb-3" style="width: 70rem;">
-
-            <div class="card-header">Seçilen Ülke Hakkında Bilgi</div>
-            <div class="card-body">
-                <h5 class="card-title">Light card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's
-                    content.</p>
-                <div class="card">
-                    <img class="card-img-top" src="..." alt="Flag">
-                    <div class="card-body">
-                        <h5 class="card-title">Ülke başlığı</h5>
-
-                        <a href="#" class="btn btn-primary mb-2">Komşu Ülkeleri göster</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="ortala" id="information">
+   
     </div>
     <!--
     
@@ -61,7 +43,10 @@
 
 -->
 </body>
+<script src="selectCountry.js"></script>
 <script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
