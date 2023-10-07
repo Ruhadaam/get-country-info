@@ -29,9 +29,9 @@ const xhrInstance = new MyXhr();
 xhrInstance.get("countries.json");
 
 let selectElement = document.getElementById("countrySelect");
-let getir = document.querySelector(".getir");
+let show = document.querySelector(".show");
 
-getir.addEventListener("click", getInfo);
+show.addEventListener("click", getInfo);
 
 function getInfo() {
     let selectedOption = selectElement.options[selectElement.selectedIndex];

@@ -10,31 +10,36 @@ function getCountry(e) {
         xhr.onload = function () {
             if (xhr.status === 200) {
                 try {
-                    information.innerHTML = `     <div class="card bg-light mb-3" style="width: 70rem;">
-
-                    <div class="card-header">About Selected Country</div>   
-                    <div class="card-body">
-                        <h5 class="card-title"></h5>
-                       
-                        <div class="card">
-                            <img class="card-img-top" src="..." alt="Flag">     
+                    let country = JSON.parse(xhr.responseText);
+                    let data = country[0];
+                    information.innerHTML = `
+                    <div class="card bg-light mb-3" style="width: 70rem;">
+                        <div class="card-header">About Selected Country</div>
+                        <div class="card-body">
+                            <h5 class="card-title"></h5>
+                            <div class="card">
+                                <img class="card-img-top" src="..." alt="Flag">
+                                <ul class="list-group">
+                                    <li class="list-group-item">Capital City: ${data.capital}</li>
+                                    <li class="list-group-item">Population: ${(data.population / 1000000).toFixed(1)}M</li>
+                                    <li class="list-group-item">Languages: ${Object.values(data.languages)}</li>
+                                </ul>
+                            </div>
+                            <a href="#" class="btn btn-primary m-2">Show Neighbors</a>
                         </div>
-                        
-                        <a href="#" class="btn btn-primary m-2">Komşu Ülkeleri göster</a>
-                    </div>
-                    <hr>
-                </div>`;
-                let infoLi = document.createElement("li");
-                let infoUl = document.createElement("ul");
+                       
+                    </div> `;
+
+
+
 
                     let countryName = document.querySelector(".card-title");
                     let button = document.querySelector(".btn-primary");
                     let ul = document.createElement("ul");
                     ul.classList = 'list-group ';
                     let cardBody = document.querySelector(".card-body");
-                    let flag = document.querySelector(".card-img-top");
-                    let country = JSON.parse(xhr.responseText);
-                    let data = country[0];
+                    let flag = document.querySelectorAll(".card-img-top")[0];
+
 
                     flag.src = data.flags.png;
                     let selectedName = data.name.common;
@@ -44,18 +49,85 @@ function getCountry(e) {
                         ' ',
                         'success');
 
-                        button.addEventListener("click", borders);
-                    // borders fonksiyonunu burada tanımlayın
-                    function borders() {
-                        data.borders.forEach(element => {
-                            let li = document.createElement("li");
-                            li.classList = 'list-group-item';
-                            li.innerHTML = element;
-                            ul.appendChild(li);
-                            cardBody.appendChild(ul);
-                        });
-                    }
+                    let bordersList = data.borders.toString();
+                    console.log("border listesi:" + bordersList);
+
+                    button.addEventListener("click", function () {
+                        if (bordersList && bordersList.length > 0) {
+                            borders(bordersList);
+                        } else {
+                            Swal.fire(
+                                'Uyarı!',
+                                'Sınır komşuları bulunmuyor.',
+                                'warning'
+                            );
+                        }
+                    });
                     
+
+                    function borders(borderData) {
+
+                        console.log("bağlanılanacak adres: " + borderData)
+                        const xhrBorders = new XMLHttpRequest();
+                        xhrBorders.open("GET", "https://restcountries.com/v3.1/alpha?codes=" + borderData);
+                        try {
+
+                            xhrBorders.onload = function () {
+                                if (xhrBorders.status === 200) {
+
+                                    let allBorderList = JSON.parse(xhrBorders.responseText);
+                                    console.log(allBorderList);
+
+                                    allBorderList.forEach(element => {
+                                        console.log(element.capital[0]);
+
+
+
+
+
+                                        let borderInfo = document.createElement("div");
+                                        borderInfo.innerHTML = `
+                                        <hr>
+                                        <div class="card bg-light" >
+                                        <div class="card-header"><h5>${element.name.common}</h5></div>
+                                        <div class="card-body" style="padding:0 !important;">
+                                            
+                                            <div class="card">
+                                                <img class="card-img-top" src="${element.flags.png}" alt="Flag">
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Capital City: ${element.capital[0]}</li>
+                                                    <li class="list-group-item">Population:  ${(element.population / 1000000).toFixed(1)}M</li>
+                                                    <li class="list-group-item">Languages: ${Object.values(element.languages)}</li>
+                                                </ul>
+                                            </div>
+                                         
+                                        </div>
+                                       
+                                    </div> `;
+                                        cardBody.appendChild(borderInfo);
+                                        /*
+                                        cardBody.appendChild(ul);
+                                    
+                                        let li = document.createElement("li");
+                                        li.classList = 'list-group-item';
+                                        li.innerHTML = `${element.name.common} <hr>`;
+                        
+                                        ul.appendChild(li);
+                                        cardBody.appendChild(ul);
+                                        */
+                                    });
+                                }
+                            }
+
+                            xhrBorders.send();
+
+                        } catch (error) {
+                            console.log(error);
+                         
+                        }
+
+                    }
+
                 }
                 catch (error) {
                     console.log(error);
@@ -64,7 +136,7 @@ function getCountry(e) {
 
                 Swal.fire(
                     'Hata!',
-                    'Ülkenin verisi mevcut değil.',
+                    'Ülkenin verisi mevcut değil',
                     'error'
                 );
             }
@@ -75,6 +147,8 @@ function getCountry(e) {
         console.log(error);
     }
 }
+
+
 
 
 
